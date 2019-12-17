@@ -266,7 +266,7 @@ static u32 sunxi_spi0_read_data(u8 *buf, u32 addr, u32 bufsize,
 #ifdef CONFIG_SPINAND
 {
 	u32 ret = bufsize;
-	addr += 0x8000;
+	//addr += 0x8000; //modify by leijie
 	int page = addr >> 11;
 	if( pages != page ) { // need read to cache
 		writel(4, spi_bc_reg); /* Burst counter (total bytes) */

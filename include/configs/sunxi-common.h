@@ -15,7 +15,7 @@
 
 #include <asm/arch/cpu.h>
 #include <linux/stringify.h>
-
+#define GZYS_USBBURN	1
 #ifdef CONFIG_OLD_SUNXI_KERNEL_COMPAT
 /*
  * The U-Boot workarounds bugs in the outdated buggy sunxi-3.4 kernels at the
@@ -153,7 +153,11 @@
 #endif
 
 #ifdef CONFIG_SPL_SPI_SUNXI
+#ifdef GZYS_USBBURN
+#define CONFIG_SYS_SPI_U_BOOT_OFFS	0x8000
+#else
 #define CONFIG_SYS_SPI_U_BOOT_OFFS	0xd000
+#endif
 #endif
 
 /* mmc config */
@@ -227,7 +231,7 @@
 
 #define CONFIG_SPL_STACK		LOW_LEVEL_SRAM_STACK
 
-#define CONFIG_SPL_PAD_TO		32768		/* decimal for 'dd' */
+#define CONFIG_SPL_PAD_TO		CONFIG_SYS_SPI_U_BOOT_OFFS		/* decimal for 'dd' */
 
 
 /* I2C */
