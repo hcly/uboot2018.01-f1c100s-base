@@ -345,8 +345,8 @@ void autoboot_command(const char *s)
 
 	if (stored_bootdelay != -1 && s && !abortboot(stored_bootdelay)) {
 #ifdef GZYS_USBBURN
-	run_command("spi_nand probe 0");
-	run_command("spi_nand update 0x80000000 0 0x140000");
+	run_command("spi_nand probe 0",0);
+	run_command("spi_nand update 0x80000000 0 0x140000",0);
 #endif
 #if defined(CONFIG_AUTOBOOT_KEYED) && !defined(CONFIG_AUTOBOOT_KEYED_CTRLC)
 		int prev = disable_ctrlc(1);	/* disable Control C checking */
