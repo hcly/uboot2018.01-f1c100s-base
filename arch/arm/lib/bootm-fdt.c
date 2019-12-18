@@ -23,7 +23,7 @@
 #include <asm/psci.h>
 #include <asm/spin_table.h>
 
-#undef CONFIG_OF_LIBFDT
+/*#undef CONFIG_OF_LIBFDT*/
 DECLARE_GLOBAL_DATA_PTR;
 
 #ifdef CONFIG_FMAN_ENET

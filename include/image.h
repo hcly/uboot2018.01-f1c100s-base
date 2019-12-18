@@ -27,7 +27,7 @@ struct lmb;
 
 /* new uImage format support enabled on host */
 #define IMAGE_ENABLE_FIT	1
-#define IMAGE_ENABLE_OF_LIBFDT	0 // 1 don't support
+#define IMAGE_ENABLE_OF_LIBFDT	1 // 1 don't support
 #define CONFIG_FIT_VERBOSE	1 /* enable fit_format_{error,warning}() */
 #define CONFIG_FIT_ENABLE_SHA256_SUPPORT
 #define CONFIG_SHA1
