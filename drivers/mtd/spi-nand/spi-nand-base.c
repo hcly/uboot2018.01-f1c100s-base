@@ -26,7 +26,7 @@ int spi_nand_erase(struct spi_nand_chip *chip, uint64_t addr, uint64_t len);
 
 static struct spi_nand_flash spi_nand_table[] = {
 	SPI_NAND_INFO("W25N01GV", 0xEF, 0xAA, 2048, 64, 64, 1024,
-			1, 1, 0 | SPINAND_NEED_PLANE_SELECT),
+			1, 1, 0),
 	SPI_NAND_INFO("GD5F1GQ4UAYIG", 0xC8, 0xF1, 2048, 64, 64, 1024,
 			1, 1, 0 | SPINAND_USED_GIGADEVICE),
 	SPI_NAND_INFO("GD5F1GQ4UBYIG", 0xC8, 0xD1, 2048, 64, 64, 1024,
@@ -1055,6 +1055,7 @@ again:
 static inline bool is_read_page_fast_benefit(struct spi_nand_chip *chip,
 			loff_t from, size_t len)
 {
+#if 0 /*modify by leijie*/
 	if (len < chip->page_size << 2)
 		return false;
 	if (from >> chip->lun_shift == (from + len) >> chip->lun_shift)
@@ -1063,6 +1064,9 @@ static inline bool is_read_page_fast_benefit(struct spi_nand_chip *chip,
 		(from + len - (1 << chip->lun_shift)) >= (chip->page_size << 2))
 		return true;
 	return false;
+#else
+	return false;
+#endif
 }
 
 /**
@@ -1846,22 +1850,6 @@ static void spi_nand_set_rd_wr_op(struct spi_nand_chip *chip)
 		chip->write_cache_rdm_op = SPINAND_CMD_PROG_LOAD_RDM_DATA;
 	}
 }
-//add by leijie for w25n01g turn off internal ecc
-static void w25n01_turn_off_iecc(struct spi_nand_chip *chip)
-{
-	u8 buf[1];
-	spi_nand_read_reg(chip,0xb0,buf);
-	printf("read status2:0x%x\n",buf[0]);
-	if(buf[0] & 0x10) {//internal ecc
-		printf("internal ecc is on now turn off\n");
-		buf[0] = buf[0] & ~(1 << 4);
-		printf("write status2:0x%x\n",buf[0]);
-		spi_nand_write_reg(chip,0xb0,buf);
-	}
-	spi_nand_read_reg(chip,0xb0,buf);
-	printf("read status2:0x%x\n",buf[0]);
-	return;
-}
 
 /**
  * spi_nand_init - [Interface] Init SPI-NAND device driver
@@ -1898,8 +1886,6 @@ static int spi_nand_init(struct spi_slave *spi, struct spi_nand_chip **chip_ptr)
 
 ident_done:
 	spi_nand_info("SPI-NAND: %s is found size: %dMB.\n", chip->name,chip->size/1024/1024);
-	if(id[0] == 0xef)
-		w25n01_turn_off_iecc(chip);
 	// giga-device need re-config rd/wr options
 	if( chip->options & SPINAND_USED_GIGADEVICE )
 		spi_nand_set_rd_wr_op(chip);
