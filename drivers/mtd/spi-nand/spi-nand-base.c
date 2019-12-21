@@ -1152,7 +1152,6 @@ static int spi_nand_do_write_ops(struct spi_nand_chip *chip, loff_t to,
 	bool clr_cache = true;
 	int lun_num;
 
-
 	spi_nand_debug("%s: to = 0x%012llx, len = %i\n",
 			 __func__, to, writelen);
 	/* Do not allow reads past end of device */
@@ -1193,7 +1192,6 @@ static int spi_nand_do_write_ops(struct spi_nand_chip *chip, loff_t to,
 	while (1) {
 		if (unlikely(ops->oobbuf)) {
 			size = min(oobwritelen, ooblen);
-
 			spi_nand_fill_oob(chip, ops->oobbuf + ops->oobretlen,
 					size, ops);
 			ret = spi_nand_program_data_to_cache(chip, page_addr,
@@ -1309,6 +1307,7 @@ static int spi_nand_do_read_oob(struct spi_nand_chip *chip, loff_t from,
 
 	spi_nand_debug("%s: from = 0x%012llx, len = %i\n",
 			 __func__, from, readlen);
+
 	if (unlikely(ooboffs >= max_len)) {
 		spi_nand_error("%s: attempt to read outside oob\n",
 				__func__);
@@ -2052,6 +2051,21 @@ int spi_nand_cmd_read_ops(struct spi_nand_chip *chip, u32 offset,
 	}
 
 	return ret;
+}
+
+
+int spi_nand_cmd_read_oob_ops(struct spi_nand_chip *chip, u32 offset,
+		size_t len, void *data)
+{
+	struct mtd_oob_ops ops = {0};
+	u32 block_addr;
+
+	block_addr = offset >> chip->block_shift;
+	ops.mode = MTD_OPS_PLACE_OOB;
+	ops.ooblen = 64;
+	ops.oobbuf = data;
+
+	return spi_nand_do_read_oob(chip, block_addr << chip->block_shift, &ops);
 }
 
 int spi_nand_probe_slave(struct spi_slave *spi, struct spi_nand_chip **chip)

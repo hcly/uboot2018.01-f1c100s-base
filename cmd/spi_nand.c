@@ -246,6 +246,10 @@ static int do_spi_nand_flash_read_write(int argc, char * const argv[])
 
 		printf("SPI-NAND: %zu bytes @ %#x %s: %s\n", (size_t)len, (u32)offset,
 		       read ? "Read" : "Written", ret ? "ERROR" : "OK");
+	} else if (strncmp(argv[0], "oob", 3) == 0) {
+		ret = spi_nand_cmd_read_oob_ops(chip, offset, len, buf);
+		printf("SPI-NAND: 64 bytes @ %#x %s: %s\n", (u32)offset,
+		       "read oob", ret ? "ERROR" : "OK");
 	}
 
 	unmap_physmem(buf, len);
@@ -344,7 +348,7 @@ static int do_spi_nand_flash(cmd_tbl_t *cmdtp, int flag, int argc,
 	}
 
 	if (strcmp(cmd, "read") == 0 || strcmp(cmd, "write") == 0 ||
-	    strcmp(cmd, "update") == 0)
+	    strcmp(cmd, "update") == 0 || strcmp(cmd, "oob") == 0)
 		ret = do_spi_nand_flash_read_write(argc, argv);
 	else if (strcmp(cmd, "erase") == 0)
 		ret = do_spi_nand_flash_erase(argc, argv, false);
@@ -372,6 +376,8 @@ U_BOOT_CMD(
 	"probe [[bus:]cs] [hz] [mode]	- init flash device on given SPI bus\n"
 	"				  and chip select\n"
 	"spi_nand read addr offset len	- read `len' bytes starting at\n"
+	"				  `offset' to memory at `addr', skipping bad blocks.\n"
+	"spi_nand oob addr offset len	- read oob 64 bytes starting at\n"
 	"				  `offset' to memory at `addr', skipping bad blocks.\n"
 	"spi_nand write addr offset len	- write `len' bytes from memory\n"
 	"				  at `addr' to flash at `offset', skipping bad blocks.\n"

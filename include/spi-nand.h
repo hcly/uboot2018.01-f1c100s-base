@@ -334,6 +334,8 @@ int spi_nand_block_isbad(struct spi_nand_chip *chip, loff_t offs);
 int spi_nand_probe_slave(struct spi_slave *spi, struct spi_nand_chip **chip);
 int spi_nand_cmd_read_ops(struct spi_nand_chip *chip, u32 offset,
 		size_t len, void *data);
+int spi_nand_cmd_read_oob_ops(struct spi_nand_chip *chip, u32 offset,
+		size_t len, void *data);
 int spi_nand_cmd_write_ops(struct spi_nand_chip *chip, u32 offset,
 		size_t len, const void *buf);
 int spi_nand_cmd_erase_ops(struct spi_nand_chip *chip, u32 offset, size_t len, bool spread);
