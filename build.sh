@@ -2,8 +2,8 @@
 CPU_NUM=$(cat /proc/cpuinfo |grep processor|wc -l)
 CPU_NUM=$((CPU_NUM+1))
 
-make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- licheepi_nano_spinand_defconfig
-make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- -j${CPU_NUM}
+make ARCH=arm CROSS_COMPILE=arm-f1c100s-linux-gnueabi- licheepi_nano_spinand_defconfig
+make ARCH=arm CROSS_COMPILE=arm-f1c100s-linux-gnueabi- -j${CPU_NUM}
 if [ -f u-boot-sunxi-with-spl.bin ]; then
 	UBOOOFFSET=$(cat u-boot.cfg | grep CONFIG_SYS_SPI_U_BOOT_OFFS | awk '{print $3}' | sed -n '1,1p')
 	if [ "$UBOOOFFSET" == "0x8000" ]; then
