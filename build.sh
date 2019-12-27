@@ -1,7 +1,7 @@
 #!/bin/bash
 CPU_NUM=$(cat /proc/cpuinfo |grep processor|wc -l)
 CPU_NUM=$((CPU_NUM+1))
-
+set -e
 make ARCH=arm CROSS_COMPILE=arm-f1c100s-linux-gnueabi- licheepi_nano_spinand_defconfig
 make ARCH=arm CROSS_COMPILE=arm-f1c100s-linux-gnueabi- -j${CPU_NUM}
 if [ -f u-boot-sunxi-with-spl.bin ]; then

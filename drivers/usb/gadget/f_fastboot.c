@@ -27,7 +27,9 @@
 #ifdef CONFIG_FASTBOOT_FLASH_NAND_DEV
 #include <fb_nand.h>
 #endif
-
+#ifdef CONFIG_SPI_NAND
+#include <fb_spinand.h>
+#endif
 #define FASTBOOT_VERSION		"0.4"
 
 #define FASTBOOT_INTERFACE_CLASS	0xff
@@ -170,7 +172,9 @@ static void fastboot_complete(struct usb_ep *ep, struct usb_request *req)
 	int status = req->status;
 	if (!status)
 		return;
+#ifndef GZYS_FASTBOOT_SPINAND
 	printf("status: %d ep '%s' trans: %d\n", status, ep->name, req->actual);
+#endif
 }
 
 static int fastboot_bind(struct usb_configuration *c, struct usb_function *f)
@@ -602,6 +606,11 @@ static void cb_flash(struct usb_ep *ep, struct usb_request *req)
 	fb_response_str = response;
 
 	fastboot_fail("no flash device defined");
+#ifdef GZYS_FASTBOOT_SPINAND
+	fb_spinand_flash_write(cmd,
+			    (void *)CONFIG_FASTBOOT_BUF_ADDR,
+			    download_bytes);
+#else
 #ifdef CONFIG_FASTBOOT_FLASH_MMC_DEV
 	fb_mmc_flash_write(cmd, (void *)CONFIG_FASTBOOT_BUF_ADDR,
 			   download_bytes);
@@ -610,6 +619,7 @@ static void cb_flash(struct usb_ep *ep, struct usb_request *req)
 	fb_nand_flash_write(cmd,
 			    (void *)CONFIG_FASTBOOT_BUF_ADDR,
 			    download_bytes);
+#endif
 #endif
 	fastboot_tx_write_str(response);
 }
@@ -654,11 +664,15 @@ static void cb_erase(struct usb_ep *ep, struct usb_request *req)
 	fb_response_str = response;
 
 	fastboot_fail("no flash device defined");
+#ifdef GZYS_FASTBOOT_SPINAND
+	fb_spinand_erase(cmd);
+#else
 #ifdef CONFIG_FASTBOOT_FLASH_MMC_DEV
 	fb_mmc_erase(cmd);
 #endif
 #ifdef CONFIG_FASTBOOT_FLASH_NAND_DEV
 	fb_nand_erase(cmd);
+#endif
 #endif
 	fastboot_tx_write_str(response);
 }

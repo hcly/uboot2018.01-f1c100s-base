@@ -118,6 +118,9 @@ endif
 ifdef CONFIG_FASTBOOT_FLASH_NAND_DEV
 obj-y += fb_nand.o
 endif
+ifdef CONFIG_SPI_NAND
+obj-y += fb_spinand.o
+endif
 endif
 
 ifdef CONFIG_CMD_EEPROM_LAYOUT

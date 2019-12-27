@@ -16,6 +16,7 @@
 #include <asm/arch/cpu.h>
 #include <linux/stringify.h>
 #define GZYS_USBBURN	1
+#define GZYS_FASTBOOT_SPINAND	1
 #ifdef CONFIG_OLD_SUNXI_KERNEL_COMPAT
 /*
  * The U-Boot workarounds bugs in the outdated buggy sunxi-3.4 kernels at the
@@ -333,11 +334,11 @@ extern int soft_i2c_gpio_scl;
 #ifdef CONFIG_USB_MUSB_SUNXI
 #define CONFIG_USB_MUSB_PIO_ONLY
 #endif
-
+/* modify by leijie
 #ifdef CONFIG_USB_MUSB_GADGET
 #define CONFIG_USB_FUNCTION_MASS_STORAGE
 #endif
-
+*/
 #ifdef CONFIG_USB_FUNCTION_MASS_STORAGE
 #endif
 

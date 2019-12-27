@@ -357,6 +357,7 @@ static int musb_usb_remove(struct udevice *dev)
 }
 
 static const struct udevice_id sunxi_musb_ids[] = {
+	{ .compatible = "allwinner,suniv-musb" },
 	{ .compatible = "allwinner,sun4i-a10-musb" },
 	{ .compatible = "allwinner,sun6i-a31-musb" },
 	{ .compatible = "allwinner,sun8i-a33-musb" },

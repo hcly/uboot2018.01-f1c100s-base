@@ -343,8 +343,13 @@ void autoboot_command(const char *s)
 {
 	debug("### main_loop: bootcmd=\"%s\"\n", s ? s : "<UNDEFINED>");
 	int ret = 0;
-	if (stored_bootdelay != -1 && s && !abortboot(stored_bootdelay)) {
 #ifdef GZYS_USBBURN
+	printf("Starting fastboot download ....\n");
+	run_command("spi_nand probe 0",0);
+	run_command("fastboot 0",0);
+#endif
+	if (stored_bootdelay != -1 && s && !abortboot(stored_bootdelay)) {
+#if 0 //def GZYS_USBBURN
 	ret = run_command("spi_nand probe 0",0);
 	ret = run_command("spi_nand erase 0 0x8000000",0);
 	ret = run_command("spi_nand write 0x80000000 0 0x200000",0);
