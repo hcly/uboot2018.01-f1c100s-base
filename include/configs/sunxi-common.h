@@ -302,9 +302,9 @@ extern int soft_i2c_gpio_scl;
  * to use as framebuffer. This must be a multiple of 4096.
  */
 #define CONFIG_SUNXI_MAX_FB_SIZE (16 << 20)
-
+/*
 #define CONFIG_VIDEO_LOGO
-#define CONFIG_VIDEO_STD_TIMINGS
+#define CONFIG_VIDEO_STD_TIMINGS*/
 #define CONFIG_I2C_EDID
 #define VIDEO_LINE_LEN (pGD->plnSizeX)
 
