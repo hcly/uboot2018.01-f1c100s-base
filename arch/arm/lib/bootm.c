@@ -216,8 +216,14 @@ static void do_nonsec_virt_switch(void)
 /* Subcommand: PREP */
 static void boot_prep_linux(bootm_headers_t *images)
 {
+#ifdef GZYS_COPY_LOGO
+	char cmdline[1024];
+	sprintf(cmdline,"%s fbphybase=0x%x",env_get("bootargs"),gd->fb_base); 
+	env_set("bootargs",cmdline);
 	char *commandline = env_get("bootargs");
-
+#else
+	char *commandline = env_get("bootargs");
+#endif
 	if (IMAGE_ENABLE_OF_LIBFDT && images->ft_len) {
 #ifdef CONFIG_OF_LIBFDT
 		debug("using: FDT\n");

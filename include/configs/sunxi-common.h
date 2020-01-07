@@ -16,6 +16,9 @@
 #include <asm/arch/cpu.h>
 #include <linux/stringify.h>
 #define GZYS_USBBURN	1
+#ifdef CONFIG_VIDEO_SUNXI
+#define GZYS_COPY_LOGO	1
+#endif
 #define GZYS_FASTBOOT_SPINAND	1
 #ifdef CONFIG_OLD_SUNXI_KERNEL_COMPAT
 /*
