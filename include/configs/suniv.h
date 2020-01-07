@@ -18,8 +18,8 @@
 	device tree 64k
 */
 #ifdef CONFIG_SPI_NAND
-#ifdef CONFIG_VIDEO_SUNXI
-#define CONFIG_BOOTCOMMAND "spi_nand probe 0;spi_nand read 80000000 200000 200000;bmp display 80000000;spi_nand read 80500000 400000 500000; spi_nand read 80c00000 900000 20000; bootz 80500000 - 80c00000"
+#ifdef GZYS_COPY_LOGO
+#define CONFIG_BOOTCOMMAND "spi_nand read 80500000 400000 500000; spi_nand read 80c00000 900000 20000; bootz 80500000 - 80c00000"
 #else
 #define CONFIG_BOOTCOMMAND "spi_nand probe 0;spi_nand read 80500000 400000 500000; spi_nand read 80c00000 900000 20000; bootz 80500000 - 80c00000"
 #endif

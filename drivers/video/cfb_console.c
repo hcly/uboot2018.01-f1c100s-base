@@ -2106,6 +2106,11 @@ static int cfg_video_init(void)
 	video_console_address = video_logo();
 #else
 	video_console_address = video_fb_address;
+#ifdef GZYS_COPY_LOGO
+	run_command("spi_nand probe 0",0);
+	run_command("spi_nand read 80000000 200000 200000",0);
+	run_command("bmp display 80000000",0);
+#endif
 #endif
 
 	/* Initialize the console */
