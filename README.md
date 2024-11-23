@@ -1,4 +1,4 @@
-#说明  
+# 说明  
 执行 ./build.sh 编译  
 文件 :include/configs/sunxi-common.h"
 打开
